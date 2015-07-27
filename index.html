@@ -1,4 +1,4 @@
-<div id="ytplayer"></div>
+<div style="display: none;" id="ytplayer"></div>
 
 <script>
   // Load the IFrame Player API code asynchronously.
@@ -14,7 +14,8 @@
     player = new YT.Player('ytplayer', {
       height: '32',
       width: '640',
-      videoId: 'WNuqo8ScAi8'
+      videoId: 'WNuqo8ScAi8',
+      autoplay: 1
     });
   }
 </script>
