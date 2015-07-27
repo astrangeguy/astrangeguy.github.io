@@ -23,8 +23,15 @@
       height: '32',
       width: '640',
       videoId: 'WNuqo8ScAi8',
-      autoplay: 1
+      playerVars: { 'autoplay': 1, 'controls': 0 },
+      events: {
+        onReady: onPlayerReady
+      }
     });
+  }
+  function onPlayerReady(event) {
+    event.target.setVolume(100);
+    event.target.playVideo();
   }
 </script>
 
