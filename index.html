@@ -5,7 +5,7 @@
   </head>
   <body>
     <div id="player"></div>
-    <div style="display: none;">
+    <div style="display: true;">
       <div id="player2"></div>
     </div>
 
@@ -29,8 +29,8 @@ function onYouTubeIframeAPIReady() {
         }
     });
     player2 = new YT.Player('player2', {
-        height: '1',
-        width: '1',
+        height: '390',
+        width: '640',
         videoId: 'PldT2jq7ApM',
         events: {
             'onReady': onPlayerReady
