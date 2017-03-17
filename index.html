@@ -5,11 +5,10 @@
   </head>
   <body>
     <div id="player"></div>
-    <div id="player2"></div>
-    
-
+    <div style="display: none;">
+      <div id="player2"/>
+    </div>
 <script>
-	//<div style="display: none;">
 var tag = document.createElement('script');
 
 tag.src = "https://www.youtube.com/iframe_api";
@@ -39,14 +38,27 @@ function onYouTubeIframeAPIReady() {
 }
 function onPlayerReady(event) {
     count--;
+    
+    var volume = 100;
+    
     if (count <= 0) {
         player.seekTo(1);
       	player.playVideo();
       	player2.playVideo();
         player.mute();
-				setTimeout(function(){
+	setTimeout(function(){
 		      	player.setPlaybackRate(0.5);
         },9000);
+	setTimeout(function(){
+            var interv = setInterval(function(){
+            	volume -= 5;
+                if (volume >= 0) {
+                	player2.setVolume(volume);
+                } else {
+                	clearInterval(interv);
+                }
+            }, 50);
+        },57000);
     }
 }
 </script>
