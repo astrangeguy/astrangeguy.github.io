@@ -1,0 +1,3 @@
+[submodule "test262-web-runner"]
+	path = test262-web-runner
+	url = git@github.com:astrangeguy/test262-web-runner.git
