@@ -158,7 +158,10 @@ function markText(){
 
     function randomWord(s){
         s = normStr(s);
-        return getWordAt(s, Math.floor(Math.random() * s.length));
+        var w = getWordAt(s, Math.floor(Math.random() * s.length));
+        console.log(w);
+        console.log(s.slice.apply(s, w));
+        return w;
     }
 
     function markWord(e, t, m, d){
@@ -210,7 +213,8 @@ function showLogo(){
 function showWP(){
     WP.style.animation = "appear 1s linear 0s 1 forwards running";
     setTimeout(showT2, 2000);
-    document.addEventListener('mouseenter', markText);
+    function el() {T1.ownerDocument.removeEventListener('mousemove', el); markText()}
+    T1.ownerDocument.addEventListener('mousemove', el);
     setTimeout(markText, 8000);
 }
 
