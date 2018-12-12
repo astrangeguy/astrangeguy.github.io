@@ -78,6 +78,9 @@ body {
   white-space:pre-line;
 }
 
+#T1 {opacity:1}
+#T1 > * {opacity:0}
+
 #BU {
   left:48;
   top:210;
@@ -137,7 +140,43 @@ und erfahren Sie mehr.</span>
       <object id="P2" type="image/svg+xml" data="opentext-whitepaper-bg.svg"></object>
       <script>
 var IS_IE = (Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject"))|| ("ActiveXObject" in window);
-function animate(e, n, l, s, d){
+
+var HAS_ANIM = document.createElement('div').style.animationName !== undefined;
+
+var anim_shim = (function() {
+    function setOpa(e,v) {e.style.setProperty('opacity', v)}
+    var fps=10,
+        anims = {
+        fade: {start: 1, end: 0, set: setOpa},
+        appear: {start: 0, end: 1, set: setOpa},
+        rp1: {start: 9, end: 8, set: function(e,v){e.style.setProperty('transform', "rotate("+v+"deg)")}},
+        rp2: {start: 9, end: 11, set: function(e,v){e.style.setProperty('transform', "translate(2px,2.5px) rotate("+v+"deg)")}},
+        marktext: {start:0, end:1, set: function(e,v){e.setAttribute('transform', "scale("+v+" 1)")}}
+    };
+    return function(e, n, l, s, d){
+        s=s||0;
+        var sv=anims[n].start,
+            ev=anims[n].end,
+            set=anims[n].set,
+            step=(ev-sv)/(l*fps);
+        
+        function anim(){
+          set(e, sv);
+          var iId = setInterval(function(){
+              sv+=step;
+              if((sv>ev && step>0)||(sv<ev && step<=0)){sv=ev;clearInterval(iId)}
+              set(e,sv);
+          }, 1000/fps);
+        }
+        if(s===0){
+          anim();
+        } else {
+          setTimeout(anim, s*1000);
+        }
+    }
+})();
+
+var animate = !HAS_ANIM ? anim_shim : function(e, n, l, s, d){
     d=d||"linear";
     s=s||0;
     
@@ -146,7 +185,7 @@ function animate(e, n, l, s, d){
     e.style.setProperty('animation-timing-function', d);
     e.style.setProperty('animation-delay', s+'s');
     e.style.setProperty('animation-fill-mode', 'both');
-}
+};
 
 function markText(){
 
@@ -193,17 +232,7 @@ function markText(){
         g.appendChild(m);
         m.setAttribute('height', h);
         m.setAttribute('width', w);
-        if(!window.IS_IE){
-          animate(m, 'marktext', 1, 0, 'ease');
-        } else {
-            m.setAttribute('transform', "scale(0 1)");
-            var scale = 0;
-            var iId = setInterval(function(){
-              if(scale > 1) {scale=1, clearInterval(iId)};
-              m.setAttribute('transform', "scale("+scale+" 1)");
-              scale += 0.1;
-            }, 100);
-        }
+        (IS_IE ? anim_shim : animate)(m, 'marktext', 1, 0, 'ease');
         return m;
     }
 
@@ -219,11 +248,8 @@ function markText(){
 }
 
 markText.run = false;
-var animStart = false;
 
 function showT1(){
-    if (animStart) return;
-    animStart = true;
     for(var i=0;i<T1.children.length;++i){
       animate(T1.children[i], 'appear', 1, i/4);
     }
@@ -235,8 +261,12 @@ function showLogo(){
     animate(L1, 'appear', 1);
     setTimeout(showWP, 1000);
 }
+var animStart = false;
 
 function showWP(){
+    if (animStart) return;
+    animStart = true;
+    P1.addEventListener('load', showWP);
     animate(WP, 'appear', 1);
     setTimeout(showT2, 2000);
     function el() {T1.ownerDocument.removeEventListener('mousemove', el); markText()}
@@ -252,7 +282,6 @@ function showT2(){
 function showBU(){
     animate(BU, 'appear', 1);
 }
-P1.addEventListener('load', showT1);
 showT1();
     </script>
     </paper>
