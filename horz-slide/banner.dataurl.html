@@ -258,6 +258,7 @@ var animate = !HAS_ANIM ? anim_shim : function(e, n, l, s, d){
     setStyle(e,'animation-fill-mode','both');
     return { after: after, then: function(f) {
         function handle(ev) {
+            //e.removeEventListener('animationend', handle);
             if(ev.animationName === n)
                 f();
         }
@@ -349,7 +350,7 @@ function showWP(){
     function el() {document.removeEventListener('mousemove', el); markText()}
     document.addEventListener('mousemove', el);
     after(8, markText);
-    return animate(WP, 'appear', 1.5, 'linear');
+    return animate(WP, 'slide', 1.5, 'linear');
 }
 
 function showT2(){
